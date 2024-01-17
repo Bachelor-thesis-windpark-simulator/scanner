@@ -20,7 +20,6 @@ for fname in images:
     # Find the chess board corners
     ret, corners = cv.findChessboardCornersSB(gray, (6,8), None)
     # If found, add object points, image points (after refining them)
-    print(ret)
     if ret == True:
         objpoints.append(objp)
         corners2 = cv.cornerSubPix(gray,corners, (11,11), (-1,-1), criteria)
@@ -31,6 +30,8 @@ for fname in images:
         cv.imshow('img', img)
         
         cv.waitKey(500)
+    else:
+        print(fname)
         
 cv.destroyAllWindows()
 
@@ -38,24 +39,24 @@ ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.sha
 
 print("ret:\n", ret, "\n mtx:\n", mtx, "\n dist:\n",dist,"\n rvecs:\n", rvecs, "\n tvecs:\n",tvecs)
 
-#img = cv.imread('test.jpg')
-#h,  w = img.shape[:2]
-#newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
+img = cv.imread('test.jpg')
+h,  w = img.shape[:2]
+newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
 
 # undistort
-#dst = cv.undistort(img, mtx, dist, None, newcameramtx)
+dst = cv.undistort(img, mtx, dist, None, newcameramtx)
 # crop the image
-#x, y, w, h = roi
-#dst = dst[y:y+h, x:x+w]
-#cv.imwrite('calibresult.png', dst)
+x, y, w, h = roi
+dst = dst[y:y+h, x:x+w]
+cv.imwrite('calibresult.png', dst)
 
 # undistort
-#mapx, mapy = cv.initUndistortRectifyMap(mtx, dist, None, newcameramtx, (w,h), 5)
-#dst = cv.remap(img, mapx, mapy, cv.INTER_LINEAR)
+mapx, mapy = cv.initUndistortRectifyMap(mtx, dist, None, newcameramtx, (w,h), 5)
+dst = cv.remap(img, mapx, mapy, cv.INTER_LINEAR)
 # crop the image
-#x, y, w, h = roi
-#dst = dst[y:y+h, x:x+w]
-#cv.imwrite('calibresult.png', dst)
+x, y, w, h = roi
+dst = dst[y:y+h, x:x+w]
+cv.imwrite('calibresult.png', dst)
 
 
 
