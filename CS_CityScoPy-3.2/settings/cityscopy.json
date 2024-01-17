@@ -6,7 +6,7 @@
     "nrows": 16,
     "ncols": 16,
     "scan": false,
-    "camId": 1,
+    "camId": 0,
     "interval": 250,
     "gui": true,
     "cityio": true,

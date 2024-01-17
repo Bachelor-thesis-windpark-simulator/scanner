@@ -216,19 +216,23 @@ class Cityscopy:
                 pass
             # else if camera capture is ok
             else:
-                h, w, *_ = this_frame.shape
-                res_matrix = np.array([[w, 0, 0], [0, h, 0], [0, 0, 1]])
-                matrix = [[1.35849769 ,0.0, 9.69135846],[0.0 , 1.35852002, 4.04283924],[ 0.0, 0.0 ,1.0]]
-                distortion = [[-0.41040225,  0.47704181,  0.00128558, -0.00100666, -0.67813111]]
-                # matrix = [[ 0.6834898667393322, 0.0, 0.4965583739104512 ], [ 0.0, 1.216452331944533, 0.5026849121434522 ], [ 0.0, 0.0, 1.0 ] ]
-                # distortion = [ -0.3714812399536999, 0.21247979505344064, -0.00020619953391510647, -0.0009202007819819389, -0.08640239614978638 ]
-                # distortion = [ -0.5714812399536999, 0.31247979505344064, -0.0020619953391510647, -0.009202007819819389, -0.8640239614978638 ]
+                h,  w = this_frame.shape[:2]
+                # h, w, *_ = this_frame.shape
+                # res_matrix = np.array([[w, 0, 0], [0, h, 0], [0, 0, 1]])
+                matrix = [[ 0.6834898667393322, 0.0, 0.4965583739104512 ], [ 0.0, 1.216452331944533, 0.5026849121434522 ], [ 0.0, 0.0, 1.0 ] ]
+                distortion = [ -0.3714812399536999, 0.21247979505344064, -0.00020619953391510647, -0.0009202007819819389, -0.08640239614978638 ]# matrix = [[ 0.6834898667393322, 0.0, 0.4965583739104512 ], [ 0.0, 1.216452331944533, 0.5026849121434522 ], [ 0.0, 0.0, 1.0 ] ]
+                # # distortion = [ -0.3714812399536999, 0.21247979505344064, -0.00020619953391510647, -0.0009202007819819389, -0.08640239614978638 ]
+                # # distortion = [ -0.5714812399536999, 0.31247979505344064, -0.0020619953391510647, -0.009202007819819389, -0.8640239614978638 ]
 
-                rel_camera_matrix = np.array(matrix)
-                distortion_coefficients = np.array(distortion)
+                rel_camera_matrix = cv2.getOptimalNewCameraMatrix(matrix, distortion, (w,h), 1, (w,h))
+                # rel_camera_matrix = np.array(matrix)
+                # distortion_coefficients = np.array(distortion)
         
-                abs_camera_matrix = np.matmul(res_matrix, rel_camera_matrix)
-                this_frame = cv2.undistort(this_frame,abs_camera_matrix, distortion_coefficients, None, None)
+                # abs_camera_matrix = np.matmul(res_matrix, rel_camera_matrix)
+                
+                # undistort
+                this_frame = cv2.undistort(this_frame, matrix, distortion, None, rel_camera_matrix)
+                # this_frame = cv2.undistort(this_frame,abs_camera_matrix, distortion_coefficients, None, None)
 
                 # mirror camera
                 if self.table_settings['mirror_cam'] is True:
@@ -809,8 +813,8 @@ class Cityscopy:
                 h, w, *_ = self.FRAME.shape
                 res_matrix = np.array([[w, 0, 0], [0, h, 0], [0, 0, 1]])
         
-                matrix = [[1.35849769 ,0.0, 9.69135846],[0.0 , 1.35852002, 4.04283924],[ 0.0, 0.0 ,1.0]]
-                distortion = [[-0.41040225,  0.47704181,  0.00128558, -0.00100666, -0.67813111]]
+                matrix = [[ 0.6834898667393322, 0.0, 0.4965583739104512 ], [ 0.0, 1.216452331944533, 0.5026849121434522 ], [ 0.0, 0.0, 1.0 ] ]
+                distortion = [ -0.3714812399536999, 0.21247979505344064, -0.00020619953391510647, -0.0009202007819819389, -0.08640239614978638 ]
                 #matrix = [[ 0.6834898667393322, 0.0, 0.4965583739104512 ], [ 0.0, 1.216452331944533, 0.5026849121434522 ], [ 0.0, 0.0, 1.0 ] ]
                 #distortion = [ -0.3714812399536999, 0.21247979505344064, -0.00020619953391510647, -0.0009202007819819389, -0.08640239614978638 ]
                 #distortion = [ -0.5714812399536999, 0.31247979505344064, -0.0020619953391510647, -0.009202007819819389, -0.8640239614978638 ]
