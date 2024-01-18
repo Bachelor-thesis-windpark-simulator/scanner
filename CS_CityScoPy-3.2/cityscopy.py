@@ -217,20 +217,17 @@ class Cityscopy:
             # else if camera capture is ok
             else:
                 h, w, *_ = this_frame.shape
-                res_matrix = np.array([[w, 0, 0], [0, h, 0], [0, 0, 1]])
-                matrix = [[613.88292291, 0, 319.217804],
-                          [0, 614.30988818, 202.28886733],
-                          [0, 0, 1]]
-                distortion = [[-0.37703198,  0.31423615, -0.00367001, -0.00103222, -0.28196277]]
-                # matrix = [[ 0.6834898667393322, 0.0, 0.4965583739104512 ], [ 0.0, 1.216452331944533, 0.5026849121434522 ], [ 0.0, 0.0, 1.0 ] ]
-                # distortion = [ -0.3714812399536999, 0.21247979505344064, -0.00020619953391510647, -0.0009202007819819389, -0.08640239614978638 ]
-                # distortion = [ -0.5714812399536999, 0.31247979505344064, -0.0020619953391510647, -0.009202007819819389, -0.8640239614978638 ]
+                #res_matrix = np.array([[w, 0, 0], [0, h, 0], [0, 0, 1]])
+                matrix =  np.array([[613.88367983, 0, 319.21787006],[0, 614.31059499, 202.28879716],[0, 0, 1]])
+                distortion =  np.array([[-0.37703544,  0.31425025, -0.00366991, -0.00103216, -0.28197977]])
 
-                rel_camera_matrix = np.array(matrix)
-                distortion_coefficients = np.array(distortion)
-        
-                abs_camera_matrix = np.matmul(res_matrix, rel_camera_matrix)
-                this_frame = cv2.undistort(this_frame,abs_camera_matrix, distortion_coefficients, None, None)
+                #rel_camera_matrix = np.array(matrix)
+                #distortion_coefficients = np.array(distortion)
+                        
+                #abs_camera_matrix = np.matmul(res_matrix, rel_camera_matrix)
+                newcameramtx, roi = cv2.getOptimalNewCameraMatrix(matrix, distortion, (w,h), 1, (w,h))
+                #this_frame = cv2.undistort(this_frame,rel_camera_matrix, distortion_coefficients, None, newcameramtx)
+                this_frame = cv2.undistort(this_frame, matrix, distortion, None, newcameramtx)
 
                 # mirror camera
                 if self.table_settings['mirror_cam'] is True:
@@ -809,19 +806,17 @@ class Cityscopy:
 
                 _, self.FRAME = WEBCAM.read()
                 h, w, *_ = self.FRAME.shape
-                res_matrix = np.array([[w, 0, 0], [0, h, 0], [0, 0, 1]])
-        
-                matrix = [[1.35849769 ,0.0, 9.69135846],[0.0 , 1.35852002, 4.04283924],[ 0.0, 0.0 ,1.0]]
-                distortion = [[-0.41040225,  0.47704181,  0.00128558, -0.00100666, -0.67813111]]
-                #matrix = [[ 0.6834898667393322, 0.0, 0.4965583739104512 ], [ 0.0, 1.216452331944533, 0.5026849121434522 ], [ 0.0, 0.0, 1.0 ] ]
-                #distortion = [ -0.3714812399536999, 0.21247979505344064, -0.00020619953391510647, -0.0009202007819819389, -0.08640239614978638 ]
-                #distortion = [ -0.5714812399536999, 0.31247979505344064, -0.0020619953391510647, -0.009202007819819389, -0.8640239614978638 ]
+                #res_matrix = np.array([[w, 0, 0], [0, h, 0], [0, 0, 1]])
+                matrix =  np.array([[613.88367983, 0, 319.21787006],[0, 614.31059499, 202.28879716],[0, 0, 1]])
+                distortion =  np.array([[-0.37703544,  0.31425025, -0.00366991, -0.00103216, -0.28197977]])
 
-                rel_camera_matrix = np.array(matrix)
-                distortion_coefficients = np.array(distortion)
-        
-                abs_camera_matrix = np.matmul(res_matrix, rel_camera_matrix)
-                self.FRAME = cv2.undistort(self.FRAME,abs_camera_matrix, distortion_coefficients, None, None)
+                #rel_camera_matrix = np.array(matrix)
+                #distortion_coefficients = np.array(distortion)
+                        
+                #abs_camera_matrix = np.matmul(res_matrix, rel_camera_matrix)
+                newcameramtx, roi = cv2.getOptimalNewCameraMatrix(matrix, distortion, (w,h), 1, (w,h))
+                #self.FRAME = cv2.undistort(self.FRAME,rel_camera_matrix, distortion_coefficients, None, newcameramtx)
+                self.FRAME = cv2.undistort(self.FRAME, matrix, distortion, None, newcameramtx)
 
 
 
