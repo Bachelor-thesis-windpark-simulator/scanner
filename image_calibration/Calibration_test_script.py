@@ -39,8 +39,55 @@ ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.sha
 
 print("ret:\n", ret, "\n mtx:\n", mtx, "\n dist:\n",dist,"\n rvecs:\n", rvecs, "\n tvecs:\n",tvecs)
 
-img = cv.imread('test.jpg')
+# cap = cv.VideoCapture(1)  # 0 for the first webcam, 1 for the second one, etc.
+# ret, img = cap.read()  # read a new frame from video
+# cap.release()  # after capturing the image, release the camera
+
+# if not ret:
+#     print("Unable to capture image")
+# h,  w = img.shape[:2]
+# newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
+
+# import time
+
+# while True:
+#     cap = cv.VideoCapture(1)  # 0 for the first webcam, 1 for the second one, etc.
+#     ret, img = cap.read()  # read a new frame from video
+#     cap.release()  # after capturing the image, release the camera
+
+#     if ret:  # if frame read successfully
+#         cv.imwrite('output.png', img)  # save the image as a PNG file
+#     else:
+#         print("Unable to capture image")
+#     img = cv.imread('output.png')
+#     h,  w = img.shape[:2]
+#     newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
+#     # undistort
+#     dst = cv.undistort(img, mtx, dist, None, newcameramtx)
+#     # crop the image
+#     x, y, w, h = roi
+#     dst = dst[y:y+h, x:x+w]
+#     cv.imshow('calibresult', dst)
+
+#     # undistort
+#     mapx, mapy = cv.initUndistortRectifyMap(mtx, dist, None, newcameramtx, (w,h), 5)
+#     dst = cv.remap(img, mapx, mapy, cv.INTER_LINEAR)
+#     # crop the image
+#     x, y, w, h = roi
+#     dst = dst[y:y+h, x:x+w]
+#     cv.imshow('calibresult', dst)
+
+#     if cv.waitKey(1) & 0xFF == ord('q'):  # press 'q' to quit
+#         break
+
+#     time.sleep(1)  # wait for 1 second
+
+# cv.destroyAllWindows()
+
+
+img = cv.imread('output.png')
 h,  w = img.shape[:2]
+print(w,h)
 newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
 
 # undistort
@@ -48,16 +95,7 @@ dst = cv.undistort(img, mtx, dist, None, newcameramtx)
 # crop the image
 x, y, w, h = roi
 dst = dst[y:y+h, x:x+w]
-cv.imwrite('calibresult.png', dst)
-
-# undistort
-mapx, mapy = cv.initUndistortRectifyMap(mtx, dist, None, newcameramtx, (w,h), 5)
-dst = cv.remap(img, mapx, mapy, cv.INTER_LINEAR)
-# crop the image
-x, y, w, h = roi
-dst = dst[y:y+h, x:x+w]
-cv.imwrite('calibresult.png', dst)
-
+cv.imwrite('calibresult2.png', dst)
 
 
 
